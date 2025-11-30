@@ -19,7 +19,8 @@ class plr {
     int getX ();
     int getY ();
 
-    void movePlr (int x_offset, int y_offset);
+    void movePlr (pair<int, int> offset);
+    char* analize(const char* line);
 };
 
 enum class cell: char {wall = '#', empty='.', bush='+'};
@@ -40,8 +41,7 @@ class Pole {
     bool isEmptyCell (int x, int y);
     char* draw();
 
-    void movePlrServak(int x_offset, int y_offset);
-    void movePlrClientosina(int x_offset, int y_offset);
+    void movePlrServak(char* whatDo);
 };
 
 char* vectorCharToCString (vector<char> line);

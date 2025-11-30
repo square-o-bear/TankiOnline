@@ -1,6 +1,10 @@
 
 #include "classes.h"
 
+
+
+
+
 // plr
 
 plr::plr (int _x, int _y) {
@@ -12,7 +16,42 @@ plr::plr () { x = 0; y = 0; }
 int plr::getX () { return x; }
 int plr::getY () { return y; }
 
-void plr::movePlr (int x_offset, int y_offset) { x += x_offset; y += y_offset; }
+void plr::movePlr (pair<int, int> offset) { x += offset.first; y += offset.second; }
+
+char* plr::analize(const char* line) {
+    vector<char> message = {' ', ' ', ' '};
+    //                       w    a   attack
+
+    for (int i = 0; i < strlen(line); ++i) {
+        switch(line[i]) {
+            case 'w': {
+                message[0] = '*';
+            } break;
+            case 'a': {
+                message[1] = '*';
+            } break;
+            case 's': {
+                message[0] = ' ';
+            } break;
+            case 'd': {
+                message[1] = ' ';
+            } break;
+            case 'e': {
+                message[2] = '*';
+            } break;
+            case 'q': {
+                message[2] = ' ';
+            } break;
+        }
+    }
+
+    return vectorCharToCString(message);
+}
+
+
+
+
+
 
 
 
@@ -34,7 +73,12 @@ char* vectorCharToCString (vector<char> line) {
 
 
 
-// sPole
+
+
+
+
+
+// Pole construct
 
 Pole::Pole (int _size) {
     width = _size;
@@ -65,6 +109,17 @@ Pole::Pole (vector<vector<cell>> _matrix) {
     clientosina = plr(height-2, width-2);
 }
 
+
+
+
+
+
+
+
+
+
+// Pole methods
+
 bool Pole::isEmptyCell (int x, int y) {
     if (y < 0 && height <= y) return true;
     if (x < 0 && width <= x) return true;
@@ -81,6 +136,12 @@ char* Pole::draw() {
         for (int _x = 0; _x < width; ++_x) {
             stringSeePole[_y*(width*2+1)+_x*2] = static_cast<char>(matrix[_y][_x]);
             stringSeePole[_y*(width*2+1)+_x*2+1] = ' ';
+
+            if (matrix[_y][_x] == cell::wall && _x != width-1) {
+                stringSeePole[_y*(width*2+1)+_x*2+1] = static_cast<char>(cell::wall);
+            } else {
+                stringSeePole[_y*(width*2+1)+_x*2+1] = ' ';
+            }
         }
         stringSeePole[_y*(width*2+1)+width*2] = '\n';
     }
@@ -91,18 +152,13 @@ char* Pole::draw() {
     return vectorCharToCString(stringSeePole);
 }
 
-void Pole::movePlrServak(int x_offset, int y_offset) {
-    
-    if (isEmptyCell(servak.getX()+x_offset, servak.getY()+y_offset)) {
-        servak.movePlr(x_offset, y_offset);
+void Pole::movePlrServak(char* whatDo) {
+    whatDo = servak.analize(whatDo);
+    if (whatDo[2] == ' ') {
+        servak.movePlr(pair<int, int>(((whatDo[0] == ' ') ? 1 : -1), 
+                                      ((whatDo[1] == ' ') ? 1 : -1)));
     }
+    else {
 
-}
-
-void Pole::movePlrClientosina(int x_offset, int y_offset) {
-
-    if (isEmptyCell(clientosina.getX()+x_offset, clientosina.getY()+y_offset)) {
-        clientosina.movePlr(x_offset, y_offset);
     }
-
 }
