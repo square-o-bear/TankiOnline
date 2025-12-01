@@ -5,11 +5,12 @@
 #include <iostream>
 #include <vector>
 #include <cstring>
+#include <cstdlib>
+#include <unistd.h>
 using namespace std;
 
 class plr {
-    int x;
-    int y;
+    int x, y, hp;
 
     public:
 
@@ -18,9 +19,12 @@ class plr {
 
     int getX ();
     int getY ();
+    int getHp ();
 
-    void movePlr (pair<int, int> offset);
+    void movePlr (int x_offset, int y_offset);
     char* analize(const char* line);
+
+    void getDamage (int damage);
 };
 
 enum class cell: char {wall = '#', empty='.', bush='+'};
@@ -42,6 +46,10 @@ class Pole {
     char* draw();
 
     void movePlrServak(char* whatDo);
+
+    void movePlrClientosina(char* whatDo);
+
+    int isContinue();
 };
 
 char* vectorCharToCString (vector<char> line);

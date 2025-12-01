@@ -4,13 +4,17 @@
 using namespace std;
 
 int main () {
-    Pole pole (10);
+    Pole pole (15);
     char use[1024];
-    cin >> use;
-    cout << use << "\n";
-    pole.movePlrServak(use);
 
-    cout << pole.draw() << "\n";
+    while (true)
+    {
+        cin >> use;
+        pole.movePlrClientosina(use);
+
+        cout << pole.draw() << "\n";
+    }
+    
 
     return 0;
 }

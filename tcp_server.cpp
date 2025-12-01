@@ -6,18 +6,16 @@
 #include <unistd.h>
 #include <vector>
 
+#include "classes.h"
+
 using namespace std;
 
 int charToInt (char diggital) {
     return diggital - '0';
 }
 
-char IntToChar (int diggital) {
-    return diggital + '0';
-}
-
 int main () {
-    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    /*int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_port = htons(8080);
@@ -25,37 +23,37 @@ int main () {
     std::cout << "start\n";
 
     bind(sockfd, (sockaddr*)&addr, sizeof(addr));
-    listen(sockfd, 2);
+    listen(sockfd, 2);*/
 
-    int client = accept(sockfd, nullptr, nullptr);
+    Pole pole (10);
+    char line[1024];
+    char *reply;
+
+    //int client = accept(sockfd, nullptr, nullptr);
     cout << "Connected to client\n";
 
-    vector<vector<char>> matrix(3, vector<char>(3, '.'));
-    do {
+    while(pole.isContinue() == 0) {
+        cout << pole.draw() << "\nWrite your action: ";
+        
+        cin >> line;
 
-        char buf[1024] = {0};
-        read(client, buf, sizeof(buf)-1);
-        std::cout << "read: [" << buf << "]\n";
+        pole.movePlrServak(line);
 
-        if (buf[0]=='-' && buf[1]=='1') {
-            char reply[12] = {'G', 'o', 'o', 'd', 'b', 'y', 'e', ' ', '!', ' ', ' ', ' '};
-            write(client, reply, strlen(reply));
-            break;
-        } else {
-            matrix[charToInt(buf[0])][charToInt(buf[1])] = buf[2];
-        }
+        /*do {
+            read(client, line, sizeof(line)-1);
+            sleep(10);
+        } while(line[0] == 0);
+        pole.movePlrClientosina(line);
+        
+        reply = pole.draw();
+        write(client, reply, strlen(reply));*/
+    }
 
-        char reply[12] = {'\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n', '\n'};
-        for (int i = 0; i < 3; ++i) {
-            for (int j = 0; j < 3; ++j) {
-                reply[4*i+j] = matrix[i][j];
-            }
-        }
-        write(client, reply, strlen(reply));
-
-    } while(true);
+    /*reply = {0};
+    reply[0] = charToInt(pole.isContinue());
+    write(client, reply, strlen(reply));
 
     close(client);
-    close(sockfd);
+    close(sockfd);*/
     return 0;
 }

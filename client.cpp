@@ -5,6 +5,8 @@
 #include <arpa/inet.h>
 #include <unistd.h>
 
+#include "classes.h"
+
 using namespace std;
 
 char IntToChar (int diggital) {
@@ -21,25 +23,22 @@ int main () {
 
     connect(sockfd, (sockaddr*)&addr, sizeof(addr));
     cout << "Connected to server!\n";
-    int x, y;
-    char v;
+    
+    char line[1024]={0};
 
     do {
-        cin >> x;
-        if (x == -1) {
-            char msg[3] = {'-', '1', ' '};
-            write(sockfd, msg, strlen(msg));
-            break;
-        }
-        else {
-            cin >> y >> v;
-            char msg[3] = {IntToChar(x), IntToChar(y), v};
-            write(sockfd, msg, strlen(msg));
 
-            char buf[1024] = {0};
-            read(sockfd, buf, sizeof(buf)-1);
-            std::cout << buf << "\n\n";
-        }
+        do {
+            read(sockfd, line, sizeof(line)-1);
+            sleep(10);
+        } while(line[0] == 0);
+
+        if (line[2] == ':') break;
+        cout << line << "\nWrite your action: ";
+        cin >> line;
+
+        
+        write(sockfd, line, sizeof(line)-1);
 
     } while(true);
 
