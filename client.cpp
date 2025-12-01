@@ -17,7 +17,7 @@ int main () {
     int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
-    addr.sin_port = htons(8080);
+    addr.sin_port = htons(4444);
     inet_pton(AF_INET, "127.0.0.1", &addr.sin_addr);
     std::cout << "start\n";
 
@@ -33,7 +33,9 @@ int main () {
             sleep(10);
         } while(line[0] == 0);
 
-        if (line[2] == ':') break;
+        if (line[2] != ':') break;
+
+        system("clear");
         cout << line << "\nWrite your action: ";
         cin >> line;
 

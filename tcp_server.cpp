@@ -15,7 +15,7 @@ int charToInt (char diggital) {
 }
 
 int main () {
-    /*int sockfd = socket(AF_INET, SOCK_STREAM, 0);
+    int sockfd = socket(AF_INET, SOCK_STREAM, 0);
     sockaddr_in addr{};
     addr.sin_family = AF_INET;
     addr.sin_port = htons(8080);
@@ -23,37 +23,40 @@ int main () {
     std::cout << "start\n";
 
     bind(sockfd, (sockaddr*)&addr, sizeof(addr));
-    listen(sockfd, 2);*/
+    listen(sockfd, 2);
 
     Pole pole (10);
     char line[1024];
     char *reply;
 
-    //int client = accept(sockfd, nullptr, nullptr);
+    int client = accept(sockfd, nullptr, nullptr);
     cout << "Connected to client\n";
 
     while(pole.isContinue() == 0) {
-        cout << pole.draw() << "\nWrite your action: ";
+        reply = pole.draw();
+
+        write(client, reply, strlen(reply));
+        system("clear");
+        cout << reply << "\nWrite your action: ";
         
         cin >> line;
+        if (line == "exit") break;
 
         pole.movePlrServak(line);
 
-        /*do {
+        do {
             read(client, line, sizeof(line)-1);
             sleep(10);
         } while(line[0] == 0);
         pole.movePlrClientosina(line);
         
-        reply = pole.draw();
-        write(client, reply, strlen(reply));*/
+        write(client, reply, strlen(reply));
     }
 
-    /*reply = {0};
+    reply = {0};
     reply[0] = charToInt(pole.isContinue());
-    write(client, reply, strlen(reply));
 
     close(client);
-    close(sockfd);*/
+    close(sockfd);
     return 0;
 }

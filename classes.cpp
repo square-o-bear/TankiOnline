@@ -178,7 +178,6 @@ char* Pole::draw() {
     stringSeePole[(servak.getY()+1)*(width*2+1)+servak.getX()*2] = '1';
     stringSeePole[(clientosina.getY()+1)*(width*2+1)+clientosina.getX()*2] = '2';
 
-    system("clear");
     return vectorCharToCString(stringSeePole);
 }
 
@@ -239,7 +238,16 @@ void Pole::movePlrClientosina(char* whatDo) {
         clientosina.movePlr(x_offset, y_offset);
     }
     else {
+        int bulletX = clientosina.getX(), bulletY = clientosina.getY();
 
+        do {
+            bulletX += x_offset;
+            bulletY += y_offset;
+        } while (isEmptyCell(bulletX, bulletY));
+
+        if (bulletX == servak.getX() && bulletY == servak.getY()) {
+            servak.getDamage(1);
+        }
     }
 }
 
